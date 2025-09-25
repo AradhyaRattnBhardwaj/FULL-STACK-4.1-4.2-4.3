@@ -1,0 +1,74 @@
+const readline = require('readline');
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+let employees = [];
+
+function showMenu() {
+  console.log('\nEmployee Management System');
+  console.log('1. Add a new employee');
+  console.log('2. List all employees');
+  console.log('3. Remove an employee by ID');
+  console.log('4. Exit');
+
+  rl.question('Choose an option: ', (choice) => {
+    switch (choice) {
+      case '1':
+        addEmployee();
+        break;
+      case '2':
+        listEmployees();
+        break;
+      case '3':
+        removeEmployee();
+        break;
+      case '4':
+        rl.close();
+        break;
+      default:
+        console.log('Invalid option. Please try again.');
+        showMenu();
+    }
+  });
+}
+
+function addEmployee() {
+  rl.question('Enter employee name: ', (name) => {
+    rl.question('Enter employee ID: ', (id) => {
+      const employee = { name, id };
+      employees.push(employee);
+      console.log(`Employee ${name} (ID: ${id}) added successfully.`);
+      showMenu();
+    });
+  });
+}
+
+function listEmployees() {
+  if (employees.length === 0) {
+    console.log('No employees found.');
+  } else {
+    console.log('\nList of Employees:');
+    employees.forEach((employee, index) => {
+      console.log(`${index + 1}. Name: ${employee.name}, ID: ${employee.id}`);
+    });
+  }
+  showMenu();
+}
+
+function removeEmployee() {
+  rl.question('Enter employee ID to remove: ', (id) => {
+    const index = employees.findIndex(employee => employee.id === id);
+    if (index !== -1) {
+      const removed = employees.splice(index, 1);
+      console.log(`Employee ${removed[0].name} (ID: ${id}) removed successfully.`);
+    } else {
+      console.log('Employee not found.');
+    }
+    showMenu();
+  });
+}
+
+showMenu();
